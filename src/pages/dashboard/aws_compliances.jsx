@@ -1,10 +1,11 @@
-import React, {useState, useEffect } from "react";
+import React, { Fragment, useState } from "react";
 import {
   Typography,
   Alert,
   Card,
   CardHeader,
   CardBody,
+  Button,
   Accordion,
   AccordionHeader,
   AccordionBody,
@@ -12,6 +13,20 @@ import {
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 
 export function AWSPage(){
+  const [showAlerts, setShowAlerts] = React.useState({
+    blue: true,
+    green: true,
+    orange: true,
+    red: true,
+  });
+  const [showAlertsWithIcon, setShowAlertsWithIcon] = React.useState({
+    blue: true,
+    green: true,
+    orange: true,
+    red: true,
+  });
+
+  const alerts = ["blue", "green", "orange", "red"];
   const [open, setOpen] = useState(1);
  
   const handleOpen = (value) => {
@@ -20,9 +35,11 @@ export function AWSPage(){
  
   return (
     <Fragment>
+      <h1 className="text-2xl font-bold leading-7 text-gray-800 sm:truncate sm:text-3xl sm:tracking-tight" >Amazon Web Services :  Benchmark Control System</h1>
+      <div className="m-20"/>
       <Accordion open={open === 1}>
         <AccordionHeader onClick={() => handleOpen(1)}>
-          What is Material Tailwind?
+        AWS Audit Manager Control Tower Guardrails
         </AccordionHeader>
         <AccordionBody>
           We&apos;re not always in the position that we want to be at.
@@ -30,6 +47,8 @@ export function AWSPage(){
           We&apos;re constantly trying to express ourselves and actualize our
           dreams.
         </AccordionBody>
+
+        <Button size="md">large</Button>
       </Accordion>
       <Accordion open={open === 2}>
         <AccordionHeader onClick={() => handleOpen(2)}>
