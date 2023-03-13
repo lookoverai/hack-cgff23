@@ -18,29 +18,30 @@ def LoadData():
         return(flask.jsonify(data))
 
 
-if __name__=='__main__':
-    a.run(debug=True, port=5002)
+
 
 
 @a.route('/aws/benchmark/executequery',methods=['GET','POST'])
 def AwsCompliance():
     s=flask.request.get_json()
-    collection_name = s['aws']
+    print(s)
+    # collection_name = db.aws
     try:
+        print("[System] Executing query...")
+        data=os.popen(s['query']).read()
+        return(flask.jsonify(json.loads(data)))
+        # if s['op'] == "audit_manager":
+        #     print("[System] Executing query...")
+        #     data=os.popen(s['query']).read()
+            # item = {
+            #     "id": s['id'],
+            #     "data": json.loads(data)
+            # }
+            # collection_name.insert_one(item)
 
-        if s['op'] == "audit_manager":
-            print("[System] Executing query...")
-            data=os.popen(s['query']).read()
-            item = {
-                "id": s['id'],
-                "data": jsonify(json.loads(data))
-            }
-            collection_name.insert_many(item_1)
+            # return(flask.jsonify(json.loads(data)))
 
-            return({
-                "status": "ok",
-            })
-    except Exception:
+    except Exception(err):
         data={"ERROR":"no data available."}
         return(flask.jsonify(data))
 

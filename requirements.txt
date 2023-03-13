@@ -1,0 +1,4 @@
+Flask==2.2.2
+flask-mongoengine==1.0.0
+Flask-WTF==1.0.1
+pymongo==4.2.0
