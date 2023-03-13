@@ -8,7 +8,7 @@ import {
 } from "@heroicons/react/24/solid";
 import AWSIcon from 'react-aws-icons/dist/aws/logo/AWS';
 
-import { Home, Profile, Tables, Notifications,AWSPage  } from "@/pages/dashboard";
+import { Home, Profile, Tables, Notifications,AWSPage, AWSPage1  } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 
 const icon = {
@@ -48,7 +48,12 @@ export const routes = [
         name: "Amazon Web Services",
         path: "/aws",
         element: <AWSPage />,
-
+      },
+      {
+        icon: <AWSIcon  {...icon} />,
+        name: "Amazon Testing Panel",
+        path: "/aws1",
+        element: <AWSPage1 />,
       }
     ],
   },
