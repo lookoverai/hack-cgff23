@@ -42,10 +42,11 @@ app.get('/', (req, res) => {
   });
 });
 
-app.use("/user", require("./api/user/route"));
-app.use("/admin", require("./api/admin/route"));
-app.use("/group", require("./api/group/route"));
-app.use("/query", require("./api/query/index"));
+// app.use("/user", require("./api/user/route"));
+// app.use("/admin", require("./api/admin/route"));
+// app.use("/group", require("./api/group/route"));
+// app.use("/query", require("./api/query/index"));
+app.use("/aws/benchmark", require("./api/aws/benchmark.route.js"));
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
