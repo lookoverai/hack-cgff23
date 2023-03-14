@@ -19,35 +19,47 @@ import {
   BookmarkIcon,
 } from "@heroicons/react/24/outline";
 
-export function AWSPage1(){
-  const [showAlerts, setShowAlerts] = React.useState({
-    blue: true,
-    green: true,
-    orange: true,
-    red: true,
-  });
-  const [showAlertsWithIcon, setShowAlertsWithIcon] = React.useState({
-    blue: true,
-    green: true,
-    orange: true,
-    red: true,
-  });
+import axios from "axios";
 
-  const alerts = ["blue", "green", "orange", "red"];
-  const [open, setOpen] = useState(1);
+export function AWSPage1(){
+  let [data, setdata] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+
+  React.useEffect(() => {
+    async function fetchData() {
+
+      if(localStorage.getItem("aws-benchmark-1")){
+        const data = JSON.parse(localStorage.getItem("aws-benchmark-1"));
+        setdata(data);
+        setLoading(false);
+        console.log("Loaded from Cache: ",data);
+        return;
+      }else{
+        const result = await axios.post(
+          "http://ec2-13-233-129-124.ap-south-1.compute.amazonaws.com:5002/aws/benchmark/executequery",{
+            "query": "cd compliances/steampipe-mod-aws-compliance && steampipe check aws_compliance.benchmark.audit_manager_control_tower --output json"
+          },{
+            timeout: 1000 * 120,
+          });
+        setdata(result.data);
+        localStorage.setItem("aws-benchmark-1", JSON.stringify(result.data));
+        console.log("Loaded from Server:", result.data)
+      }
+    }
+    fetchData();
+  },[])
  
-  const handleOpen = (value) => {
-    setOpen(open === value ? 0 : value);
-  };
 
 
   
+  
   return (
     <Fragment>
-      <h1 className="text-2xl font-bold leading-7 text-gray-800 sm:truncate sm:text-3xl sm:tracking-tight" >Amazon Web Services :  Benchmark Control System</h1>
-      
-
-
+      {loading && <div>loading ho rha hai be...</div>}
+      {!loading && (
+        <h1 className="text-2xl font-bold leading-7 text-gray-800 sm:truncate sm:text-3xl sm:tracking-tight" >Amazon Web Services :  Benchmark Control System</h1>
+      )}
     </Fragment>
   );
 }
