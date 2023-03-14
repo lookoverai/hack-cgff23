@@ -19,7 +19,14 @@ import {
   BookmarkIcon,
 } from "@heroicons/react/24/outline";
 
+
+import AWSCompilanceComponent from "./aws_compliances_page1";
+
 export function AWSPage(){
+
+  let [ loadedFromCache, setLoadedFromCache ] = React.useState(false);
+  let [ data, setData ] = React.useState(null);
+
   const [showAlerts, setShowAlerts] = React.useState({
     blue: true,
     green: true,
@@ -33,12 +40,49 @@ export function AWSPage(){
     red: true,
   });
 
+  let [component, setComponent] = React.useState(false);
+
   const alerts = ["blue", "green", "orange", "red"];
   const [open, setOpen] = useState(1);
  
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
+
+
+  async function fetchData() {
+
+    if(localStorage.getItem("aws-benchmark-1")){
+      const datax = JSON.parse(localStorage.getItem("aws-benchmark-1"));
+      console.log("Loaded from Cache...");
+      setLoadedFromCache(true)
+      setData(datax)
+      // return (
+      //   <Fragment>
+      //      <AWSCompilanceComponent loadedFromCache={true} data={data} />
+      //   </Fragment>
+      // );
+    }else{
+      const result = await axios.post(
+        "http://ec2-13-233-129-124.ap-south-1.compute.amazonaws.com:5002/aws/benchmark/executequery",{
+          "query": "cd compliances/steampipe-mod-aws-compliance && steampipe check aws_compliance.benchmark.audit_manager_control_tower --output json"
+        },{
+          timeout: 1000 * 120,
+        });
+      localStorage.setItem("aws-benchmark-1", JSON.stringify(result.data));
+      console.log("Loaded from Server")
+      setLoadedFromCache(false)
+      setData(result.data)
+
+      // return (
+      //   <Fragment>
+      //     <AWSCompilanceComponent loadedFromCache={false} data={result.data} />
+      //   </Fragment>
+      // )
+    }
+  }
+
+  // fetchData();
 
 
   const listOfBenchmarks = [
@@ -83,6 +127,14 @@ export function AWSPage(){
       "desc":"The Federal Risk and Authorization Management Program (FedRAMP) is a US government-wide program that delivers a standard approach to the security assessment, authorization, and continuous monitoring for cloud products and services."
     }
   ]
+
+  if(data){
+     return (
+        <Fragment>
+          <AWSCompilanceComponent loadedFromCache={loadedFromCache} data={data} />
+        </Fragment>
+      )
+  }
  
   return (
     <Fragment>
@@ -102,7 +154,7 @@ export function AWSPage(){
                   </div>
                   <div className="m-2 flex gap-2">
                     <Button color="red">Delete Reports</Button>
-                    <Button color="green" size="md">Start Analytics</Button>
+                    <Button onClick={() => fetchData()} color="green" size="md">Start Analytics</Button>
                     <Button variant="outlined" className="flex items-center gap-3">
                     Re-Render Analytics
                     <ArrowPathIcon strokeWidth={2} className="h-5 w-5" />
