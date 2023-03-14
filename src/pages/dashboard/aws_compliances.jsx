@@ -131,7 +131,7 @@ export function AWSPage(){
   if(data){
      return (
         <Fragment>
-          <AWSCompilanceComponent loadedFromCache={loadedFromCache} data={data} />
+          <AWSCompilanceComponent loadedFromCache={loadedFromCache} datax={data} />
         </Fragment>
       )
   }
