@@ -1,4 +1,4 @@
-service: aws-educacy-pdeu-attendace-api
+service: aws-intelhub-backend-api
 frameworkVersion: '3'
 # useDotenv: true
 # plugins:
